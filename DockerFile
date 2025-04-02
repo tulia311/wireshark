@@ -1,0 +1,56 @@
+# Utilise l'image Debian stable
+FROM debian:stable-slim
+
+# Ajoute des métadonnées à l'image pour identification
+LABEL Name=wireshark-test Version=0.0.1
+LABEL Description="Wireshark avec SSH et X11 forwarding" \
+      Vendor="Tulia311" \
+      Version="0.0.1" \
+      Maintainer="Tulia311"
+
+# Variables d'environnement
+ENV DEBIAN_FRONTEND=noninteractive \
+    DISPLAY=172.26.112.1:10.0 \
+    XDG_RUNTIME_DIR=/tmp/runtime-root \
+    QT_X11_NO_MITSHM=1
+
+# Installation des paquets nécessaires
+RUN apt-get update && \
+    apt-get install -y \
+    wireshark \
+    openssh-server \
+    xauth \
+    dbus-x11 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Création de l'utilisateur non-root
+RUN groupadd -g 1000 wireshark_user && \
+    useradd -u 1000 -g wireshark_user -m -d /home/wireshark_user wireshark_user && \
+    chown -R wireshark_user:wireshark_user /home/wireshark_user
+
+# Configuration ENV
+COPY .bashrc  /home/wireshark_user/.bashrc
+COPY .bashrc  /etc/bash.bashrc
+COPY .bashrc  /etc/profile.d/
+
+# Permissions X11
+RUN echo > /etc/profile.d/.Xauthority && \
+    chmod 600 /etc/profile.d/.Xauthority
+
+# Configuration Wireshark pour les non-root
+RUN dpkg-reconfigure -f noninteractive wireshark-common && \
+    usermod -aG wireshark_user root && \
+    echo > /home/wireshark_user/.Xauthority
+
+# Configuration SSH
+RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config && \
+    echo 'X11Forwarding yes' >> /etc/ssh/sshd_config && \
+    echo 'X11DisplayOffset 10' >> /etc/ssh/sshd_config && \
+    echo 'AllowAgentForwarding yes' >> /etc/ssh/sshd_config
+
+# Exposition des ports
+EXPOSE 22
+
+# Point de montage pour X11
+VOLUME /tmp/.X11-unix
