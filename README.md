@@ -94,18 +94,9 @@ docker rm wireshark
 # Relancer avec les mêmes paramètres
 ```
 
-## 🤝 Contribution
-
-1. Forker le dépôt
-2. Créer une branche (`git checkout -b feature/amelioration`)
-3. Commiter vos modifications (`git commit -am 'feat: nouvelle fonctionnalité'`)
-4. Pousser vers votre branche (`git push origin feature/amelioration`)
-5. Ouvrir une Pull Request
-
 ## 📚 Documentation
 
 - [Documentation officielle de Wireshark](https://www.wireshark.org/docs/)
-- [Guide utilisateur TShark](https://tshark.dev)
 - [Documentation Docker](https://docs.docker.com)
 
 ## 📄 Licence
