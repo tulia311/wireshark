@@ -51,12 +51,13 @@ docker-compose up -d
 ### Exemple de configuration
 
 ```sh
-docker run -d --name wireshark \
+docker run -it --name wireshark \
   -e DISPLAY=${DISPLAY} \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   -v ${HOME}/.Xauthority:/root/.Xauthority \
   --cap-add=NET_RAW \
   --cap-add=NET_ADMIN \
+  -p 2222:22 \
   tulia311/wireshark
 ```
 
