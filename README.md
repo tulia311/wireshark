@@ -98,14 +98,14 @@ docker rm wireshark
 ```sh
 Démarrer le service SSH --> /etc/init.d/ssh start
 
-Ajouter la variable ENV pour wireshark-user
-wireshark-user --> Shell --> "export DISPLAY=ADDRESS_DOCKER_ENGINE:10.0"
+Ajouter la variable ENV pour wireshark_user
+wireshark_user  --> Shell --> "export DISPLAY=ADDRESS_DOCKER_ENGINE:10.0"
 
  -------------------------------
 |  Utilisateur   | Mot de passe |
 |----------------|--------------|
 |      root      |    toor      |
-| wireshark-user |  wireshark   |
+| wireshark_user  |  wireshark   |
  -------------------------------
 ```
 
