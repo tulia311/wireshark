@@ -13,7 +13,7 @@ Basé sur la dernière version stable de Debian slim, il permet une analyse effi
 
 ```sh
 # Cloner le dépôt
-git clone https://github.com/tulia311/wireshark-docker.git
+git clone https://github.com/tulia311/wireshark.git
 cd wireshark-docker
 
 # Construire l'image Docker
