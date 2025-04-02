@@ -92,8 +92,10 @@ docker pull tulia311/wireshark
 docker stop wireshark
 docker rm wireshark
 # Relancer avec les mêmes paramètres
+```
 
-# Ulisateurs
+##  Ulisateurs
+```sh
 Démarrage service SSH --> /etc/init.d/ssh start
 Ajouter la variable ENV pour wireshark-user
 wireshark-user --> Shell --> "export DISPLAY=172.26.112.1:10.0"
