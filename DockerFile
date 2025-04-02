@@ -2,7 +2,7 @@
 FROM debian:stable-slim
 
 # Ajoute des métadonnées à l'image pour identification
-LABEL Name=wireshark-test Version=0.0.1
+LABEL Name=wireshark Version=0.0.1
 LABEL Description="Wireshark avec SSH et X11 forwarding" \
       Vendor="Tulia311" \
       Version="0.0.1" \
