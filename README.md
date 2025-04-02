@@ -1,9 +1,5 @@
 # Wireshark Docker 🕵️‍♂️
 
-![Version](https://img.shields.io/github/v/release/tulia311/wireshark-docker)
-![License](https://img.shields.io/github/license/tulia311/wireshark-docker)
-![Docker Pulls](https://img.shields.io/docker/pulls/tulia311/wireshark)
-
 ![Interface Wireshark](https://miro.medium.com/v2/resize:fit:512/0*mMMUXeLUT7RWL8GB.png)
 
 Un environnement Docker léger pour exécuter Wireshark avec prise en charge de SSH et du transfert X11.
@@ -95,7 +91,7 @@ docker rm wireshark
 # Relancer avec les mêmes paramètres
 ```
 
-##  Ulisateurs
+##  Utilisateurs
 ```sh
 Démarrer le service SSH --> /etc/init.d/ssh start
 
