@@ -1,21 +1,18 @@
 version: '3.8'
+
 services:
   wireshark:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    network_mode: "bridge"
+    image: wireshark-test
+    container_name: wireshark-test
     environment:
       - DISPLAY=${DISPLAY}
-      - CAPTURE_INTERFACE=any
-      - CAPTURE_FILTER=
-    cap_add:
-      - NET_ADMIN
-      - NET_RAW
-      - SYS_PTRACE
     volumes:
-      - ./config:/app/config
-      - ./src:/app
-    restart: unless-stopped
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ${HOME}/.Xauthority:/root/.Xauthority
     ports:
-      - "8080:8080"
+      - "2222:22"
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    stdin_open: true
+    tty: true
