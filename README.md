@@ -96,7 +96,7 @@ docker rm wireshark
 
 ##  Ulisateurs
 ```sh
-Démarrage service SSH --> /etc/init.d/ssh start
+Démarrer le service SSH --> /etc/init.d/ssh start
 Ajouter la variable ENV pour wireshark-user
 wireshark-user --> Shell --> "export DISPLAY=172.26.112.1:10.0"
 
