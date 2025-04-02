@@ -1,132 +1,117 @@
-# Interface Web Wireshark Docker
+# Wireshark Docker 🕵️‍♂️
 
-![Wireshark Logo](./wireshark.png)
+![Version](https://img.shields.io/github/v/release/tulia311/wireshark-docker)
+![License](https://img.shields.io/github/license/tulia311/wireshark-docker)
+![Docker Pulls](https://img.shields.io/docker/pulls/tulia311/wireshark)
 
-Ce projet fournit une interface web Dockerisée pour Wireshark permettant d'analyser le trafic réseau en temps réel via votre navigateur.
+![Interface Wireshark](https://miro.medium.com/v2/resize:fit:512/0*mMMUXeLUT7RWL8GB.png)
 
-## Structure du projet
+Un environnement Docker léger pour exécuter Wireshark avec prise en charge de SSH et du transfert X11.
+Basé sur la dernière version stable de Debian slim, il permet une analyse efficace et sécurisée du trafic réseau avec une configuration minimale.
 
-```
-wireshark-docker/
-├── Dockerfile
-├── src/
-│   ├── app.py
-│   └── templates/
-│       └── index.html
-├── .gitignore
-└── README.md
-```
+## ⚡ Démarrage rapide
 
-## Fonctionnalités
+```sh
+# Cloner le dépôt
+git clone https://github.com/tulia311/wireshark-docker.git
+cd wireshark-docker
 
-- Interface web responsive
-- Capture de paquets en temps réel
-- Sélection d'interface réseau
-- Filtrage des paquets
-- Visualisation détaillée des captures
-- Support de TShark
+# Construire l'image Docker
+docker build -t tulia311/wireshark .
 
-## Pour commencer
-
-1. **Cloner le dépôt** :
-   ```bash
-   git clone https://github.com/tulia311/wireshark.git
-   cd wireshark
-   ```
-
-2. **Construire l'image Docker** :
-   ```bash
-   docker build -t wireshark .
-   ```
-
-3. **Exécuter le conteneur** :
-   ```bash
-   docker run --name wireshark \
-     --net=host \
-     --privileged \
-     -p 8080:8080 \
-     wireshark
-   ```
-
-4. **Accéder à l'interface web** :
-   Ouvrez votre navigateur et accédez à `http://localhost:8080`
-
-## Configuration
-
-Vous pouvez personnaliser le comportement via des variables d'environnement :
-
-```bash
-docker run --name wireshark \
-  --net=host \
-  --privileged \
-  -p 8080:8080 \
-  -e CAPTURE_INTERFACE=eth0 \
-  -e CAPTURE_FILTER="port 80" \
-  wireshark
+# Lancer le conteneur avec Docker Compose
+docker-compose up -d
 ```
 
-Variables disponibles :
-- `CAPTURE_INTERFACE` : Interface réseau à surveiller (défaut: "any")
-- `CAPTURE_FILTER` : Filtre de capture BPF (exemple: "port 80")
+## ✨ Fonctionnalités
+- Wireshark préconfiguré pour un usage sans privilèges root
+- Serveur SSH sécurisé avec transfert X11 activé
+- Création d'un utilisateur non-root pour plus de sécurité
+- Prise en charge des applications GUI via SSH et X11
+- Optimisé pour une faible consommation de ressources
 
-## Utilisation de l'interface web
+## 📌 Prérequis
 
-1. **Sélection de l'interface** :
-   - Choisissez l'interface réseau dans le menu déroulant
-   - L'option "Toutes les interfaces" capture sur toutes les interfaces
+- Docker Engine 20.10+
+- Serveur X11 installé sur la machine hôte
+- Client SSH avec prise en charge du transfert X11
+- Minimum 2 Go de RAM
+- 1 Go d’espace disque
 
-2. **Contrôles de capture** :
-   - Cliquez sur "Démarrer la capture" pour commencer
-   - Cliquez sur "Arrêter la capture" pour terminer
+## ⚙️ Configuration
 
-3. **Visualisation** :
-   - Les paquets s'affichent en temps réel
-   - Chaque paquet montre :
-     - Horodatage
-     - Adresse source
-     - Adresse destination
-     - Protocoles utilisés
+### Variables d'environnement
 
-## Sécurité
+| Variable | Description | Valeur par défaut | Requis |
+|----------|-------------|---------|---------|
+| DISPLAY | Variable d'affichage X11 | Dépend de l'hôte | Oui |
+| XDG_RUNTIME_DIR | Répertoire runtime X11 | /tmp/runtime-root | Non |
+| QT_X11_NO_MITSHM | Empêche les problèmes de mémoire partagée X11 | 1 | Non |
 
-**Important** : Ce conteneur nécessite des privilèges élevés pour la capture réseau.
+### Exemple de configuration
 
-### Recommandations de sécurité
+```sh
+docker run -d --name wireshark \
+  -e DISPLAY=${DISPLAY} \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  -v ${HOME}/.Xauthority:/root/.Xauthority \
+  --cap-add=NET_RAW \
+  --cap-add=NET_ADMIN \
+  tulia311/wireshark
+```
 
-1. **Isolation réseau** :
-   - Utilisez des réseaux Docker dédiés
-   - Limitez les interfaces réseau exposées
-   - Configurez des règles de pare-feu strictes
+## 📖 Utilisation
 
-2. **Authentification et autorisation** :
-   - Implémentez une authentification forte (OAuth2, JWT)
-   - Utilisez HTTPS avec des certificats valides
-   - Définissez des rôles utilisateurs avec permissions limitées
+### Accès SSH
+```sh
+ssh -X wireshark@localhost -p 2222
+```
 
-3. **Configuration du conteneur** :
-   ```bash
-   docker run --name wireshark \
-     --net=host \
-     --security-opt=no-new-privileges \
-     --cap-drop=ALL \
-     --cap-add=NET_ADMIN \
-     --cap-add=NET_RAW \
-     -p 127.0.0.1:8080:8080 \
-     wireshark
-   ```
+### Lancement de Wireshark
+```sh
+wireshark
+```
+Si le transfert X11 est correctement configuré, l’interface graphique de Wireshark apparaîtra sur votre machine locale.
 
-4. **Bonnes pratiques** :
-   - Mettez régulièrement à jour l'image Docker
-   - Surveillez les logs pour détecter les activités suspectes
-   - Effectuez des audits de sécurité périodiques
-   - Limitez l'accès aux fichiers de capture
+## 🔒 Bonnes pratiques de sécurité
+- Restreindre l’accès SSH aux utilisateurs de confiance
+- Limiter l’exposition réseau du conteneur
+- Éviter d’exécuter des processus en tant que root
 
-## Exigences
+## 🔧 Maintenance
 
-- Docker
-- Navigateur web moderne
-- Accès réseau privilégié sur l'hôte
+```sh
+# Voir les logs
+docker logs -f wireshark
 
-## Licence
+# Redémarrer le conteneur
+docker restart wireshark
 
-Ce projet est sous licence MIT. Voir le fichier LICENSE pour plus de détails.
+# Mettre à jour l'image
+docker pull tulia311/wireshark
+docker stop wireshark
+docker rm wireshark
+# Relancer avec les mêmes paramètres
+```
+
+## 🤝 Contribution
+
+1. Forker le dépôt
+2. Créer une branche (`git checkout -b feature/amelioration`)
+3. Commiter vos modifications (`git commit -am 'feat: nouvelle fonctionnalité'`)
+4. Pousser vers votre branche (`git push origin feature/amelioration`)
+5. Ouvrir une Pull Request
+
+## 📚 Documentation
+
+- [Documentation officielle de Wireshark](https://www.wireshark.org/docs/)
+- [Guide utilisateur TShark](https://tshark.dev)
+- [Documentation Docker](https://docs.docker.com)
+
+## 📄 Licence
+
+Ce projet est sous licence MIT - voir [LICENSE](https://raw.githubusercontent.com/tulia311/wireshark/refs/heads/main/LICENSE) pour plus de détails.
+
+---
+Développé avec ❤️ par [Tulia311](https://github.com/tulia311)
+
