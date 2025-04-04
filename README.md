@@ -47,21 +47,23 @@ docker-compose up -d
 ### Exemple de configuration
 
 ```sh
-docker run -it --name wireshark \
-  -e DISPLAY=${DISPLAY} \
+docker run -d \
+  -e DISPLAY=$DISPLAY \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -v ${HOME}/.Xauthority:/root/.Xauthority \
+  -v $HOME/.Xauthority:/root/.Xauthority \
   --cap-add=NET_RAW \
   --cap-add=NET_ADMIN \
   -p 2222:22 \
-  tulia311/wireshark
+  wireshark \
+  bash -c "/etc/init.d/ssh start && tail -f /dev/null"
 ```
 
 ## 📖 Utilisation
 
 ### Accès SSH
 ```sh
-ssh -X wireshark@localhost -p 2222
+ssh -X root@localhost -p 2222
+MobaXterm Xserver.....
 ```
 
 ### Lancement de Wireshark
@@ -91,19 +93,15 @@ docker rm wireshark
 # Relancer avec les mêmes paramètres
 ```
 
-##  Utilisateurs
+##  Utilisateur
 ```sh
-Démarrer le service SSH --> /etc/init.d/ssh start
 
-Ajouter la variable ENV pour wireshark_user
-wireshark_user  --> Shell --> "export DISPLAY=ADDRESS_DOCKER_ENGINE:10.0"
-
- -------------------------------
-|  Utilisateur   | Mot de passe |
-|----------------|--------------|
-|      root      |    toor      |
-| wireshark_user |  wireshark   |
- -------------------------------
+ ---------------------------------
+|  Utilisateur   |  Mot de passe  |
+|----------------|----- ----------|
+|      root      |     toor       |
+| wireshark_user | wireshark-user |
+ ---------------------------------
 
 MobaXterm Xserver avec SSH, telnet, RDP, VNC and X11
 Port SSH 2222
@@ -111,11 +109,16 @@ Port SSH 2222
 ```
 ## 📚 Documentation
 
--  [Documentation MobaXterm Xserver](X11.pdf)
+-  [Documentation MobaXterm Xserver](https://github.com/tulia311/wireshark/blob/main/X11.pdf)
 - [Documentation officielle de Wireshark](https://www.wireshark.org/docs/)
 - [Documentation Docker](https://docs.docker.com)
 
 ## 📄 Licence
+
+Ce projet est sous licence MIT - voir [LICENSE](https://raw.githubusercontent.com/tulia311/wireshark/refs/heads/main/LICENSE) pour plus de détails.
+
+---
+Développé avec ❤️ par [Tulia311](https://github.com/tulia311)
 
 Ce projet est sous licence MIT - voir [LICENSE](https://raw.githubusercontent.com/tulia311/wireshark/refs/heads/main/LICENSE) pour plus de détails.
 
