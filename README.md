@@ -115,7 +115,7 @@ Port SSH 2222
 
 ## 📄 Licence
 
-Ce projet est sous licence MIT - voir [LICENSE](https://raw.githubusercontent.com/tulia311/wireshark/refs/heads/main/LICENSE) pour plus de détails.
+- Ce projet est sous licence MIT - voir [LICENSE](https://raw.githubusercontent.com/tulia311/wireshark/refs/heads/main/LICENSE) pour plus de détails.
 ---
 Développé avec ❤️ par [Tulia311](https://github.com/tulia311)
 
