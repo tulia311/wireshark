@@ -29,7 +29,7 @@ RUN groupadd -g 1000 wireshark_user && \
     chown -R wireshark_user:wireshark_user /home/wireshark_user
 
 # Configuration ENV
-COPY .bashrc  /etc/profile
+COPY bashrc  /etc/profile
 
 # Permissions X11
 RUN echo > /etc/profile.d/.Xauthority && \
