@@ -10,16 +10,15 @@ LABEL Description="Wireshark avec SSH et X11 forwarding" \
 
 # Variables d'environnement
 ENV DEBIAN_FRONTEND=noninteractive \
-    DISPLAY=172.26.112.1:10.0 \
     XDG_RUNTIME_DIR=/tmp/runtime-root \
-    QT_X11_NO_MITSHM=1
+    QT_X11_NO_MITSHM=1 
 
 # Installation des paquets nécessaires
 RUN apt-get update && \
     apt-get install -y \
     wireshark \
+    iproute2 \
     openssh-server \
-    xauth \
     dbus-x11 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -30,9 +29,7 @@ RUN groupadd -g 1000 wireshark_user && \
     chown -R wireshark_user:wireshark_user /home/wireshark_user
 
 # Configuration ENV
-COPY .bashrc  /home/wireshark_user/.bashrc
-COPY .bashrc  /etc/bash.bashrc
-COPY .bashrc  /etc/profile.d/
+COPY .bashrc  /etc/profile
 
 # Permissions X11
 RUN echo > /etc/profile.d/.Xauthority && \
@@ -40,14 +37,18 @@ RUN echo > /etc/profile.d/.Xauthority && \
 
 # Configuration Wireshark pour les non-root
 RUN dpkg-reconfigure -f noninteractive wireshark-common && \
-    usermod -aG wireshark_user root && \
+    usermod -aG wireshark wireshark_user && \
     echo > /home/wireshark_user/.Xauthority
+
+USER root
 
 # Configuration SSH
 RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config && \
     echo 'X11Forwarding yes' >> /etc/ssh/sshd_config && \
     echo 'X11DisplayOffset 10' >> /etc/ssh/sshd_config && \
-    echo 'AllowAgentForwarding yes' >> /etc/ssh/sshd_config
+    echo 'AllowAgentForwarding yes' >> /etc/ssh/sshd_config && \
+    echo 'root:toor' | chpasswd && \
+    echo 'wireshark_user:wireshark_user' | chpasswd
 
 # Exposition des ports
 EXPOSE 22
