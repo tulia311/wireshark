@@ -2,15 +2,14 @@
 FROM debian:stable-slim
 
 # Ajoute des métadonnées à l'image pour identification
-LABEL Name=wireshark Version=0.0.1
+LABEL Name=wireshark Version=0.0.2
 LABEL Description="Wireshark avec SSH et X11 forwarding" \
-      Vendor="Tulia311" \
-      Version="0.0.1" \
-      Maintainer="Tulia311"
+    Vendor="Tulia311" \
+    Version="0.0.1" \
+    Maintainer="Tulia311"
 
 # Variables d'environnement
 ENV DEBIAN_FRONTEND=noninteractive \
-    XDG_RUNTIME_DIR=/tmp/runtime-root \
     QT_X11_NO_MITSHM=1 
 
 # Installation des paquets nécessaires
@@ -26,32 +25,35 @@ RUN apt-get update && \
 # Création de l'utilisateur non-root
 RUN groupadd -g 1000 wireshark_user && \
     useradd -u 1000 -g wireshark_user -m -d /home/wireshark_user wireshark_user && \
-    chown -R wireshark_user:wireshark_user /home/wireshark_user
+    chown -R wireshark_user:wireshark_user /home/wireshark_user && \
+    setcap cap_net_raw,cap_net_admin=eip /usr/bin/dumpcap    
 
 # Configuration ENV
 COPY bashrc  /etc/profile
 
 # Permissions X11
-RUN echo > /etc/profile.d/.Xauthority && \
-    chmod 600 /etc/profile.d/.Xauthority
+RUN echo > /etc/profile.d/.Xauthority  
 
 # Configuration Wireshark pour les non-root
 RUN dpkg-reconfigure -f noninteractive wireshark-common && \
-    usermod -aG wireshark wireshark_user && \
-    echo > /home/wireshark_user/.Xauthority
-
-USER root
+    usermod -aG wireshark_user wireshark_user && \
+    echo > /home/wireshark_user/.Xauthority && \
+    chown wireshark_user:wireshark_user /home/wireshark_user/.Xauthority && \
+    chmod 700 /home/wireshark_user/.Xauthority
 
 # Configuration SSH
 RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config && \
     echo 'X11Forwarding yes' >> /etc/ssh/sshd_config && \
     echo 'X11DisplayOffset 10' >> /etc/ssh/sshd_config && \
     echo 'AllowAgentForwarding yes' >> /etc/ssh/sshd_config && \
-    echo 'root:toor' | chpasswd && \
+    echo 'port 2222' >> /etc/ssh/sshd_config
+
+#MDP root et wireshark_user
+RUN echo 'root:toor' | chpasswd && \
     echo 'wireshark_user:wireshark_user' | chpasswd
 
 # Exposition des ports
-EXPOSE 22
+EXPOSE 2222
 
 # Point de montage pour X11
 VOLUME /tmp/.X11-unix
