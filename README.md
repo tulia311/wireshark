@@ -53,7 +53,6 @@ docker run -d \
   -v $HOME/.Xauthority:/root/.Xauthority \
   --cap-add=NET_RAW \
   --cap-add=NET_ADMIN \
-  -p 2222:2222 \
   --network host \
   tulia311/wireshark \
   bash -c "/etc/init.d/ssh start && tail -f /dev/null"
