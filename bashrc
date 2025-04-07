@@ -120,4 +120,5 @@ fi
 GATEWAY=$(ip route show dev eth0 | awk '/default/ {print $3}')
 export DISPLAY=$GATEWAY:10.0
 export SHELL=/bin/bash
+/usr/sbin/setcap cap_net_raw,cap_net_admin=ep /usr/bin/dumpcap
 #

@@ -1,5 +1,5 @@
 # Utilise l'image Debian stable
-FROM debian:stable-slim
+FROM debian
 
 # Ajoute des métadonnées à l'image pour identification
 LABEL Name=wireshark Version=0.0.2
@@ -20,13 +20,15 @@ RUN apt-get update && \
     openssh-server \
     dbus-x11 && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* \
+    apt upgrade liblzma5 \
+    apt upgrade tzdata
 
 # Création de l'utilisateur non-root
 RUN groupadd -g 1000 wireshark_user && \
     useradd -u 1000 -g wireshark_user -m -d /home/wireshark_user wireshark_user && \
     chown -R wireshark_user:wireshark_user /home/wireshark_user && \
-    setcap cap_net_raw,cap_net_admin=eip /usr/bin/dumpcap    
+    chmod 7755   /usr/sbin/setcap
 
 # Configuration ENV
 COPY bashrc  /etc/profile
