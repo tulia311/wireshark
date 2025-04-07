@@ -111,7 +111,7 @@ Port SSH 2222
 
 ## 📚 Resultat
 
-- ![Capture écran](https://github.com/tulia311/wireshark/blob/main/Result.jpeg)
+- ![Capture écran](https://github.com/tulia311/wireshark/blob/main/Result.png)
 
 ##
 
