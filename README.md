@@ -111,13 +111,13 @@ Port SSH 2222
 
 ## 📚 Resultat
 
-- [Capture écran](https://github.com/tulia311/wireshark/blob/main/Result.jpeg)
+- ![Capture écran](https://github.com/tulia311/wireshark/blob/main/Result.jpeg)
 
 ##
 
 ## 📚 Documentation
 
--  [Documentation MobaXterm Xserver](https://github.com/tulia311/wireshark/blob/main/X11.pdf)
+- [Documentation MobaXterm Xserver](https://github.com/tulia311/wireshark/blob/main/X11.pdf)
 - [Documentation officielle de Wireshark](https://www.wireshark.org/docs/)
 - [Documentation Docker](https://docs.docker.com)
 
